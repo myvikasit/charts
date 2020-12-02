@@ -15,7 +15,39 @@ $ helm install my-release bitnami/redis
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 $ helm install my-release bitnami/redis --values values-production.yaml
 ```
+## ACCESS REDIS from kubectl
+```bash
+helm install my-redis bitnami/redis --values values-production.yaml  
+NAME: my-redis
+LAST DEPLOYED: Wed Dec  2 17:29:08 2020
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+** Please be patient while the chart is being deployed **
+Redis can be accessed via port 6379 on the following DNS name from within your cluster:
 
+my-redis.default.svc.cluster.local for read only operations
+
+For read/write operations, first access the Redis Sentinel cluster, which is available in port 26379 using the same domain name above.
+
+
+To get your password run:
+
+    export REDIS_PASSWORD=$(kubectl get secret --namespace default my-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+
+To connect to your Redis server:
+
+1. Run a Redis pod that you can use as a client:
+   kubectl run --namespace default my-redis-client --rm --tty -i --restart='Never' \
+    --env REDIS_PASSWORD=$REDIS_PASSWORD \--labels="my-redis-client=true" \
+   --image docker.io/bitnami/redis:6.0.9-debian-10-r13 -- bash
+
+2. Connect using the Redis CLI:
+   redis-cli -h my-redis -p 6379 -a $REDIS_PASSWORD # Read only operations
+   redis-cli -h my-redis -p 26379 -a $REDIS_PASSWORD # Sentinel access
+```
 ## Introduction
 
 This chart bootstraps a [Redis](https://github.com/bitnami/bitnami-docker-redis) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.

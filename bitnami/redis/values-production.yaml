@@ -47,7 +47,7 @@ cluster:
 ## Use redis sentinel in the redis pod. This will disable the master and slave services and
 ## create one redis service with ports to the sentinel and the redis instances
 sentinel:
-  enabled: false
+  enabled: true
   ## Require password authentication on the sentinel itself
   ## ref: https://redis.io/topics/sentinel
   usePassword: true
@@ -209,7 +209,7 @@ usePassword: true
 ## Defaults to a random 10-character alphanumeric string if not set and usePassword is true
 ## ref: https://github.com/bitnami/bitnami-docker-redis#setting-the-server-password-on-first-run
 ##
-password:
+password: "secret-password-need-to-change-no-commit-should-happen"
 ## Use existing secret (ignores previous password)
 # existingSecret:
 ## Password key to be retrieved from Redis secret
